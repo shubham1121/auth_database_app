@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:auth_database_cart/models/post_data.dart';
+import 'package:auth_database_cart/screens/home_page.dart';
 import 'package:auth_database_cart/utils/database_firestore.dart';
 import 'package:auth_database_cart/utils/loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,8 +10,7 @@ import 'package:auth_database_cart/utils/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CreatePostPage extends StatefulWidget {
-  final user;
-   CreatePostPage({Key? key, this.user}) : super(key: key);
+   CreatePostPage({Key? key}) : super(key: key);
   User? current_user = FirebaseAuth.instance.currentUser; // to get current firebase user
     @override
   _CreatePostPageState createState() => _CreatePostPageState();
@@ -34,7 +34,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   @override
   void initState() {
     super.initState();
-    userid = widget.user.uid;
+    userid = widget.current_user!.uid;
     _databaseService = DatabaseService(userid);
     date = DateTime(now.year, now.month, now.day);
   }
@@ -69,7 +69,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     setState(() {
       uploading=true;
     });
-    PostData post = PostData(postTitle.text.toString(), postDesc.text.toString(), widget.user.uid, date.toLocal().toString());
+    PostData post = PostData(postTitle.text.toString(), postDesc.text.toString(), widget.current_user!.uid, date.toLocal().toString());
     for (var img in _image) {
       String? result = await _databaseService.uploadImageFirebaseStorage(img,post);
       if (result == null) {
@@ -95,7 +95,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: const Text('Home Page'),
+          title: const Text('Create Post'),
           actions: [
             IconButton(
               onPressed: () {
@@ -179,7 +179,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         ),
                         ElevatedButton(onPressed: (){
                           setState(() {
-                            uploadFile().whenComplete(() => Navigator.of(context).pop());
+                            uploadFile().whenComplete(() => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()),),);
                           });
                         }, child: const Text('Upload'),),
                       ],
