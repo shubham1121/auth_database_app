@@ -10,9 +10,10 @@ import 'package:auth_database_cart/utils/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CreatePostPage extends StatefulWidget {
-   CreatePostPage({Key? key}) : super(key: key);
-  User? current_user = FirebaseAuth.instance.currentUser; // to get current firebase user
-    @override
+  CreatePostPage({Key? key}) : super(key: key);
+  User? current_user =
+      FirebaseAuth.instance.currentUser; // to get current firebase user
+  @override
   _CreatePostPageState createState() => _CreatePostPageState();
 }
 
@@ -20,7 +21,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   late String userid;
   final AuthService _authService = AuthService();
   bool uploading = false;
-  late DatabaseService _databaseService ;
+  late DatabaseService _databaseService;
   final _picker = ImagePicker();
   TextEditingController postDesc = TextEditingController();
   TextEditingController postTitle = TextEditingController();
@@ -29,7 +30,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
   List<String> uplImgLink = [];
   DateTime now = DateTime.now();
   late DateTime date;
-
 
   @override
   void initState() {
@@ -40,9 +40,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
   }
 
   chooseImage() async {
-    final pickedImage = await _picker.pickImage(source: ImageSource.gallery,imageQuality: 50);
-    if(pickedImage==null)
-      {return;}
+    final pickedImage =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    if (pickedImage == null) {
+      return;
+    }
     setState(() {
       _image.add(File(pickedImage.path));
     });
@@ -50,7 +52,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
       retrieveLostData();
     }
   }
-
 
   Future<void> retrieveLostData() async {
     final LostDataResponse response = await _picker.retrieveLostData();
@@ -67,11 +68,16 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   Future<void> uploadFile() async {
     setState(() {
-      uploading=true;
+      uploading = true;
     });
-    PostData post = PostData(postTitle.text.toString(), postDesc.text.toString(), widget.current_user!.uid, date.toLocal().toString());
+    PostData post = PostData(
+        postTitle.text.toString(),
+        postDesc.text.toString(),
+        widget.current_user!.uid,
+        date.toLocal().toString());
     for (var img in _image) {
-      String? result = await _databaseService.uploadImageFirebaseStorage(img,post);
+      String? result =
+          await _databaseService.uploadImageFirebaseStorage(img, post);
       if (result == null) {
         print('Null Result Error');
       }
@@ -79,11 +85,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
       post.uplImgLink.add(result!);
     }
     String? uplResult = await _databaseService.addPost(post);
-    if(uplResult=="Error")
-      {
-       return uploadFile();
-      }
-    else {
+    if (uplResult == "Error") {
+      return uploadFile();
+    } else {
       uplImgLink.clear();
     }
   }
@@ -107,89 +111,101 @@ class _CreatePostPageState extends State<CreatePostPage> {
             ),
           ],
         ),
-        body: uploading ?  Loading(true) : ListView(
-          children: [
-            Column(
-              children: [
-                Form(
-                  key: _postFormKey,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 25),
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          style: TextStyle(
-                            fontSize:
-                                getOrientation(context) == Orientation.portrait
-                                    ? displayWidth(context) * 0.045
-                                    : displayHeight(context) * 0.045,
-                          ),
-                          autofocus: false,
-                          controller: postTitle,
-                          decoration: const InputDecoration(
-                            hintText: 'Enter Title of the Post',
-                            labelText: 'Title',
-                          ),
-                        ),
-                        TextFormField(
-                          style: TextStyle(
-                            fontSize:
-                                getOrientation(context) == Orientation.portrait
-                                    ? displayWidth(context) * 0.045
-                                    : displayHeight(context) * 0.045,
-                          ),
-                          autofocus: false,
-                          controller: postDesc,
-                          decoration: const InputDecoration(
-                            hintText: 'Enter Description of the Post',
-                            labelText: 'Description',
-                          ),
-                        ),
-                        GridView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: _image.length + 1,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                          ),
-                          itemBuilder: (context, index) {
-                            return index == 0
-                                ? Center(
-                                    child: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          chooseImage();
-                                        });
-                                      },
-                                      icon: const Icon(Icons.add),
-                                    ),
-                                  )
-                                : Container(
-                                    margin: const EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: FileImage(_image[index - 1]),
-                                        fit: BoxFit.cover,
+        body: uploading
+            ? Loading(true)
+            : ListView(
+                children: [
+                  Column(
+                    children: [
+                      Form(
+                        key: _postFormKey,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 25),
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                style: TextStyle(
+                                  fontSize: getOrientation(context) ==
+                                          Orientation.portrait
+                                      ? displayWidth(context) * 0.045
+                                      : displayHeight(context) * 0.045,
+                                ),
+                                autofocus: false,
+                                controller: postTitle,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter Title of the Post',
+                                  labelText: 'Title',
+                                ),
+                              ),
+                              TextFormField(
+                                style: TextStyle(
+                                  fontSize: getOrientation(context) ==
+                                          Orientation.portrait
+                                      ? displayWidth(context) * 0.045
+                                      : displayHeight(context) * 0.045,
+                                ),
+                                autofocus: false,
+                                controller: postDesc,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter Description of the Post',
+                                  labelText: 'Description',
+                                ),
+                              ),
+                              GridView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                itemCount: _image.length + 1,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                ),
+                                itemBuilder: (context, index) {
+                                  return index == 0
+                                      ? Center(
+                                          child: IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                chooseImage();
+                                              });
+                                            },
+                                            icon: const Icon(Icons.add),
+                                          ),
+                                        )
+                                      : Container(
+                                          margin: const EdgeInsets.all(3),
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image:
+                                                  FileImage(_image[index - 1]),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        );
+                                },
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    uploadFile().whenComplete(
+                                      () => Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePage()),
                                       ),
-                                    ),
-                                  );
-                          },
+                                    );
+                                  });
+                                },
+                                child: const Text('Upload'),
+                              ),
+                            ],
+                          ),
                         ),
-                        ElevatedButton(onPressed: (){
-                          setState(() {
-                            uploadFile().whenComplete(() => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()),),);
-                          });
-                        }, child: const Text('Upload'),),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          ],
-        ),
+                ],
+              ),
       ),
     );
   }

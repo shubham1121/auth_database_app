@@ -14,7 +14,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('All Post');
   DatabaseService(this.uid);
 
-  Future updateUserData(String name, String contactNo, String profession) async {
+  Future updateUserData(
+      String name, String contactNo, String profession) async {
     return await userCollection.doc(uid).set({
       'name': name,
       'contactNo': contactNo,
@@ -36,7 +37,8 @@ class DatabaseService {
       .snapshots()
       .map((snapshot) => _ourUserListfromSnapshot(snapshot));
 
-  Future<String?> uploadImageFirebaseStorage(File img, PostData postData) async {
+  Future<String?> uploadImageFirebaseStorage(
+      File img, PostData postData) async {
     late UploadTask uploadTask;
     try {
       final Reference storageReference = FirebaseStorage.instance
@@ -86,12 +88,12 @@ class DatabaseService {
       'desc': post.desc,
       'upldate': post.date,
       'userId': uid,
-      'postId' : "",
+      'postId': "",
       'images': FieldValue.arrayUnion(post.uplImgLink),
-    }).then((value) async{
-       await allPostCollection.doc(value.id).update({
-         'postId' : value.id.toString(),
-       });
+    }).then((value) async {
+      await allPostCollection.doc(value.id).update({
+        'postId': value.id.toString(),
+      });
       return "Success";
     }).catchError((error) => "Error Found");
     if (uploadResult == "Error Found") {
@@ -111,8 +113,8 @@ class DatabaseService {
       PostData postData = PostData(doc.get('title'), doc.get('desc'),
           doc.get('userId'), doc.get('upldate'));
       postData.uplImgLink = doc.get('images');
-      postData.postId=doc.get('postId');
-      print(postData.uplImgLink);
+      postData.postId = doc.get('postId');
+      // print(postData.uplImgLink);
       return postData;
     }).toList();
   }
@@ -121,9 +123,25 @@ class DatabaseService {
       .snapshots()
       .map((snapshot) => _ourPostListFromSnapshot(snapshot));
 
-  Future? deletePost(PostData? postData) async
-  { if(postData!=null)
-    {
+  List<PostData?>? _ourUserPostListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      if (doc.get('userId') == uid) {
+        PostData postData = PostData(doc.get('title'), doc.get('desc'),
+            doc.get('userId'), doc.get('upldate'));
+        postData.uplImgLink = doc.get('images');
+        postData.postId = doc.get('postId');
+        print(postData);
+        return postData;
+      }
+    }).toList();
+  }
+
+  Stream<List<PostData?>?> get userPostData => allPostCollection
+      .snapshots()
+      .map((snapshot) => _ourUserPostListFromSnapshot(snapshot));
+
+  Future? deletePost(PostData? postData) async {
+    if (postData != null) {
       for (var pD in postData.uplImgLink) {
         await FirebaseStorage.instance.refFromURL(pD).delete();
       }

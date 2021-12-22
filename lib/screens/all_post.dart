@@ -1,7 +1,7 @@
 import 'package:auth_database_cart/models/post_data.dart';
 import 'package:auth_database_cart/utils/database_firestore.dart';
 import 'package:auth_database_cart/utils/firebase_auth.dart';
-import 'package:auth_database_cart/utils/post_list.dart';
+import 'package:auth_database_cart/utils/all_post_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +38,7 @@ class _AllPostsState extends State<AllPosts> {
               ),
             ],
           ),
-          body:  const PostList(),
+          body: const AllPostList(),
         ),
       ),
     );

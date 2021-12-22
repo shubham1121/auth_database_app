@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'device_size.dart';
+
 class Loading extends StatelessWidget {
   bool showStatus = false;
   Loading(this.showStatus);
@@ -26,6 +28,18 @@ class Loading extends StatelessWidget {
                 size: 50.0,
               ),
             ),
+    );
+  }
+}
+class smallLoadingIndicatorForImages extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: SpinKitSpinningLines(color: Colors.black,
+            size: displayWidth(context) * 0.20,
+          lineWidth: displayWidth(context) * 0.015,),
+      ),
     );
   }
 }
