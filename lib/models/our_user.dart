@@ -5,7 +5,8 @@ class OurUser {
   final String contactNumber;
   final String profession;
 
-  OurUser({ required this.name, required this.contactNumber, required this.profession});
-
-
+  OurUser(
+      {required this.name,
+      required this.contactNumber,
+      required this.profession});
 }
