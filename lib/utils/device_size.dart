@@ -12,7 +12,6 @@ double displayWidth(BuildContext context) {
   return displaySize(context).width;
 }
 
-Orientation getOrientation (BuildContext context)
-{
+Orientation getOrientation(BuildContext context) {
   return MediaQuery.of(context).orientation;
 }

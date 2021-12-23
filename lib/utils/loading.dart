@@ -31,14 +31,17 @@ class Loading extends StatelessWidget {
     );
   }
 }
+
 class smallLoadingIndicatorForImages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: SpinKitSpinningLines(color: Colors.black,
-            size: displayWidth(context) * 0.20,
-          lineWidth: displayWidth(context) * 0.015,),
+        child: SpinKitSpinningLines(
+          color: Colors.black,
+          size: displayWidth(context) * 0.20,
+          lineWidth: displayWidth(context) * 0.015,
+        ),
       ),
     );
   }

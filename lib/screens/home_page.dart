@@ -20,11 +20,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final AuthService _authService = AuthService();
-  final List<Widget> _children =  [
+  final List<Widget> _children = [
     const UserList(),
     CreatePostPage(),
     const AllPosts(),
-     MyPostPage(),
+    MyPostPage(),
   ];
   int _current_index = 0;
   void onTabTapped(int index) {
@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                 bottomNavigationBar: SalomonBottomBar(
                   currentIndex: _current_index,
                   onTap: onTabTapped,
-                  items:  [
+                  items: [
                     SalomonBottomBarItem(
                       icon: const Icon(Icons.home),
                       title: const Text('Home'),

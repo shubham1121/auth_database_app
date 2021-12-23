@@ -29,7 +29,8 @@ class _AllPostListState extends State<AllPostList> {
                 scrollDirection: Axis.vertical,
                 itemCount: allNonNullPostList.length,
                 itemBuilder: (context, index) {
-                  return PostCard(postData: allNonNullPostList[index]);
+                  return PostCard(
+                      postData: allNonNullPostList[index], isAllPost: true);
                 },
               );
   }

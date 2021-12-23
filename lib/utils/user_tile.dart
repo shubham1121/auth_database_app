@@ -8,7 +8,7 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return Padding(
       padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
       child: Card(
         child: ListTile(

@@ -120,6 +120,7 @@ class DatabaseService {
   }
 
   Stream<List<PostData?>?> get postData => allPostCollection
+      .orderBy("upldate")
       .snapshots()
       .map((snapshot) => _ourPostListFromSnapshot(snapshot));
 
@@ -137,6 +138,7 @@ class DatabaseService {
   }
 
   Stream<List<PostData?>?> get userPostData => allPostCollection
+      .orderBy('upldate')
       .snapshots()
       .map((snapshot) => _ourUserPostListFromSnapshot(snapshot));
 

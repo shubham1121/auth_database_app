@@ -31,7 +31,8 @@ class _MyPostListState extends State<MyPostList> {
                 itemCount: userNonNullPostList.length,
                 itemBuilder: (context, index) {
                   print(userNonNullPostList.length);
-                  return PostCard(postData: userNonNullPostList[index]);
+                  return PostCard(
+                      postData: userNonNullPostList[index], isAllPost: false);
                 },
               );
   }

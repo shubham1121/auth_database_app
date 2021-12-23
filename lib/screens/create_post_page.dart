@@ -4,6 +4,7 @@ import 'package:auth_database_cart/screens/home_page.dart';
 import 'package:auth_database_cart/utils/database_firestore.dart';
 import 'package:auth_database_cart/utils/loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:auth_database_cart/utils/device_size.dart';
 import 'package:auth_database_cart/utils/firebase_auth.dart';
@@ -39,32 +40,56 @@ class _CreatePostPageState extends State<CreatePostPage> {
     date = DateTime(now.year, now.month, now.day);
   }
 
-  chooseImage() async {
-    final pickedImage =
-        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+  Future chooseImage() async {
+    final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedImage == null) {
       return;
     }
-    setState(() {
-      _image.add(File(pickedImage.path));
-    });
-    if (pickedImage.path == null) {
-      retrieveLostData();
-    }
-  }
-
-  Future<void> retrieveLostData() async {
-    final LostDataResponse response = await _picker.retrieveLostData();
-    if (response == null) {
-      print('Null Response Error');
-      return;
-    }
-    if (response.file != null) {
+    final file = File(pickedImage.path);
+    final croppedFile = await cropSquareImage(file);
+    if (croppedFile == null) {
       setState(() {
-        _image.add(File(response.file!.path));
+        // _image.add(File(pickedImage.path));
+      });
+    } else {
+      setState(() {
+        _image.add(croppedFile);
       });
     }
+    // if (pickedImage.path == null) {
+    //   retrieveLostData();
+    // }
   }
+
+  Future<File?> cropSquareImage(File imageFile) async {
+    File? croppedFile = await ImageCropper.cropImage(
+      sourcePath: imageFile.path,
+      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+      aspectRatioPresets: [CropAspectRatioPreset.square],
+      compressQuality: 50,
+      androidUiSettings: androidUiSettingsLocked(),
+    );
+    return croppedFile;
+  }
+
+  AndroidUiSettings androidUiSettingsLocked() {
+    return const AndroidUiSettings(
+      toolbarColor: Colors.indigo,
+      toolbarWidgetColor: Colors.white,
+    );
+  }
+  // Future<void> retrieveLostData() async {
+  //   final LostDataResponse response = await _picker.retrieveLostData();
+  //   if (response == null) {
+  //     print('Null Response Error');
+  //     return;
+  //   }
+  //   if (response.file != null) {
+  //     setState(() {
+  //       _image.add(File(response.file!.path));
+  //     });
+  //   }
+  // }
 
   Future<void> uploadFile() async {
     setState(() {

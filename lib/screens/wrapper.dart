@@ -29,6 +29,6 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
-    return user != null ? const HomePage() : const AuthenticationPage() ;
+    return user != null ? const HomePage() : const AuthenticationPage();
   }
 }

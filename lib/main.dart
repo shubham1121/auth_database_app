@@ -1,4 +1,3 @@
-import 'package:auth_database_cart/models/post_data.dart';
 import 'package:auth_database_cart/screens/wrapper.dart';
 import 'package:auth_database_cart/utils/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
